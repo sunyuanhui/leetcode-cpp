@@ -20,6 +20,7 @@ set(CMAKE_OUTPUT_DIRECTORY_INTDIR ${TARGET_DIR}/bin/${CMAKE_CFG_INTDIR})
 
 add_subdirectory(gmock)
 add_subdirectory("Min Stack")
+add_subdirectory("Reverse Integer")
 
 set(ALL_TEST 
     MinStack
