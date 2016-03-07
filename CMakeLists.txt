@@ -24,6 +24,7 @@ add_executable(leetcode
 	TextFixture.h
     MinStack.cpp
     ReverseInteger.cpp
+	ZigZagConversion.cpp
 )
 target_link_libraries(leetcode gmock)
 
