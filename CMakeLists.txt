@@ -19,11 +19,17 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${TARGET_DIR}/bin)
 set(CMAKE_OUTPUT_DIRECTORY_INTDIR ${TARGET_DIR}/bin/${CMAKE_CFG_INTDIR})
 
 add_subdirectory(gmock)
-add_subdirectory("Min Stack")
-add_subdirectory("Reverse Integer")
+
+add_executable(leetcode
+    MinStack.h
+    t_MinStack.cpp
+    ReverseInteger.h
+    t_ReverseInteger.cpp
+)
+target_link_libraries(leetcode gmock)
 
 set(ALL_TEST 
-    MinStack
+    leetcode
     )
 
 foreach(ONE_TEST ${ALL_TEST})
