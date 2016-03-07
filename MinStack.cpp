@@ -1,3 +1,4 @@
+#include "TextFixture.h"
 #include <limits.h>
 #include <deque>
 
@@ -43,3 +44,18 @@ private:
     deque<int> m_stack;
     int m_min_value = INT_MAX;
 };
+
+TEST_F(LeetCodeTestFixture, MinStack) {
+    MinStack min_stack;
+    min_stack.push(2);
+    min_stack.push(0);
+    min_stack.push(3);
+    min_stack.push(0);
+    EXPECT_EQ(min_stack.getMin(), 0);
+    min_stack.pop();
+    EXPECT_EQ(min_stack.getMin(), 0);
+    min_stack.pop();
+    EXPECT_EQ(min_stack.getMin(), 0);
+    min_stack.pop();
+    EXPECT_EQ(min_stack.getMin(), 2);
+}

@@ -21,16 +21,13 @@ set(CMAKE_OUTPUT_DIRECTORY_INTDIR ${TARGET_DIR}/bin/${CMAKE_CFG_INTDIR})
 add_subdirectory(gmock)
 
 add_executable(leetcode
-    MinStack.h
-    t_MinStack.cpp
-    ReverseInteger.h
-    t_ReverseInteger.cpp
+	TextFixture.h
+    MinStack.cpp
+    ReverseInteger.cpp
 )
 target_link_libraries(leetcode gmock)
 
-set(ALL_TEST 
-    leetcode
-    )
+set(ALL_TEST leetcode)
 
 foreach(ONE_TEST ${ALL_TEST})
     add_test(NAME ${ONE_TEST} COMMAND ${ONE_TEST} --config $<CONFIGURATION>
