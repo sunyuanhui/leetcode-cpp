@@ -12,24 +12,37 @@ public:
             return s;
         }
 
+        size_t len = s.length();
+        for (size_t i = 0; i < len; ++i) {
+            int row = calRow(numRows, i);
+            int group = calGroup(numRows, i);
+            cout << "row=" << row << " group " << group << endl;
+        }
+
         string result;
-        int column = calColumn(s, numRows);
+        int column = calGroupCount(s, numRows);
         return result;
     }
-    int calColumn(const string &s, int numRows) {
+    int calGroupCount(const string &s, int numRows) {
         size_t len = s.length();
-        int column = 0;
-        const int tb = 2; // top & bottom
-        const int column_num = numRows + (numRows - tb);
-        while (len != 0) {
-            column++;
-            if (len < column_num) {
-                break;
-            }
-            len = len - column_num;
+        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
+        if (group_num > 0) {
+            return len / group_num + (((len % group_num) != 0) ? 1 : 0);
+        } else {
+            return 0;
         }
-        return column;
     }
+    int calGroup(int numRows, int index) {
+        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
+        return index / group_num;
+    }
+    int calRow(int numRows, int index) {
+        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
+        int index_in_group = index % group_num;
+        return index_in_group < numRows ? index_in_group : group_num - index_in_group;
+    }
+
+    const int top_and_bottom = 2;
 };
 
 TEST_F(LeetCodeTestFixture, ZigZagConversion) {
@@ -37,31 +50,33 @@ TEST_F(LeetCodeTestFixture, ZigZagConversion) {
     string origin = "PAYPALISHIRING";
 	string result;
     int column;
+    int long_column;
+    int group_num;
 
 	result = solution.convert(origin, 1);
     EXPECT_EQ(result, "PAYPALISHIRING");
 
     //P Y A I H R N
     //A P L S I I G
-    column = solution.calColumn(origin, 2);
-    EXPECT_EQ(column, 7);
-	result = solution.convert(origin, 2);
+    group_num = solution.calGroupCount(origin, 2);
+    EXPECT_EQ(group_num, 7);
+    result = solution.convert(origin, 2);
     EXPECT_EQ(result, "PYAIHRNAPLSIIG");
 
     //P   A   H   N
     //A P L S I I G
     //Y   I   R
-    column = solution.calColumn(origin, 3);
-    EXPECT_EQ(column, 4);
-	result = solution.convert(origin, 3);
+    group_num = solution.calGroupCount(origin, 3);
+    EXPECT_EQ(group_num, 4);
+    result = solution.convert(origin, 3);
     EXPECT_EQ(result, "PAHNAPLSIIGYIR");
 
-    //P     I     N
-    //A   L S   I G
-    //Y A   H R 
-    //P     I 
-    column = solution.calColumn(origin, 4);
-    EXPECT_EQ(column, 3);
-	result = solution.convert(origin, 4);
-    EXPECT_EQ(result, "PINALSIGYAHRPI");
+    //P   I   N
+    //A L S I G
+    //Y A H R 
+    //P   I 
+    group_num = solution.calGroupCount(origin, 4);
+    EXPECT_EQ(group_num, 3);
+   result = solution.convert(origin, 4);
+   EXPECT_EQ(result, "PINALSIGYAHRPI");
 }
