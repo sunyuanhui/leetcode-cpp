@@ -14,85 +14,49 @@ public:
 
         string result;
         size_t len = s.length();
-        result.resize(len);
 
-        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
-
-        for (size_t i = 0; i < len; ++i) {
-            int row = calRow(numRows, i);
-            int column = calColumn(numRows, i);
-            int group = calGroup(numRows, i);
-            cout << "row=" << row << " column " << column << " group " << group << endl;
-        }
+        const int top_and_bottom = 2;
+        const int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
 
         for (size_t i = 0; i < len; i += group_num) {
-            cout << i;
+            result.push_back(s.at(i));
         }
 
-        for (size_t i = 1; i < numRows; i++) {
+        for (int i = 1; i < numRows - 1; i++) {
             for (size_t j = i; j < len; j += group_num) {
-                cout << j;
+                result.push_back(s.at(j));
+
+                int group = j / group_num;
+                int next = (group_num - i) + group * group_num;
+                if (next < len) {
+                    result.push_back(s.at(next));
+                }
             }
         }
 
-        int column = calGroupCount(s, numRows);
+        for (size_t i = numRows - 1; i < len; i += group_num) {
+            result.push_back(s.at(i));
+        }
         return result;
     }
-    int calGroupCount(const string &s, int numRows) {
-        size_t len = s.length();
-        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
-        if (group_num > 0) {
-            return len / group_num + (((len % group_num) != 0) ? 1 : 0);
-        } else {
-            return 0;
-        }
-    }
-    int calGroup(int numRows, int index) {
-        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
-        return index / group_num;
-    }
-    int calRow(int numRows, int index) {
-        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
-        int index_in_group = index % group_num;
-        return index_in_group < numRows ? index_in_group : group_num - index_in_group;
-    }
-    int calColumn(int numRows, int index) {
-        int group = calGroup(numRows, index);
-        if (numRows == 2) {
-            return group;
-        } else {
-            int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
-            int column_in_group = (index % group_num) / numRows;
-            return group * 2 + column_in_group;
-        }
-    }
-
-    const int top_and_bottom = 2;
 };
 
 TEST_F(LeetCodeTestFixture, ZigZagConversion) {
     Solution solution;
-    string origin = "PAYPALISHIRING";
 	string result;
-    int column;
-    int long_column;
-    int group_num;
+    string origin = "PAYPALISHIRING";
 
 	result = solution.convert(origin, 1);
     EXPECT_EQ(result, "PAYPALISHIRING");
 
     //P Y A I H R N
     //A P L S I I G
-    group_num = solution.calGroupCount(origin, 2);
-    EXPECT_EQ(group_num, 7);
     result = solution.convert(origin, 2);
     EXPECT_EQ(result, "PYAIHRNAPLSIIG");
 
     //P   A   H   N
     //A P L S I I G
     //Y   I   R
-    group_num = solution.calGroupCount(origin, 3);
-    EXPECT_EQ(group_num, 4);
     result = solution.convert(origin, 3);
     EXPECT_EQ(result, "PAHNAPLSIIGYIR");
 
@@ -100,8 +64,6 @@ TEST_F(LeetCodeTestFixture, ZigZagConversion) {
     //A L S I G
     //Y A H R 
     //P   I 
-    group_num = solution.calGroupCount(origin, 4);
-    EXPECT_EQ(group_num, 3);
    result = solution.convert(origin, 4);
    EXPECT_EQ(result, "PINALSIGYAHRPI");
 }
