@@ -12,14 +12,29 @@ public:
             return s;
         }
 
+        string result;
         size_t len = s.length();
+        result.resize(len);
+
+        int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
+
         for (size_t i = 0; i < len; ++i) {
             int row = calRow(numRows, i);
+            int column = calColumn(numRows, i);
             int group = calGroup(numRows, i);
-            cout << "row=" << row << " group " << group << endl;
+            cout << "row=" << row << " column " << column << " group " << group << endl;
         }
 
-        string result;
+        for (size_t i = 0; i < len; i += group_num) {
+            cout << i;
+        }
+
+        for (size_t i = 1; i < numRows; i++) {
+            for (size_t j = i; j < len; j += group_num) {
+                cout << j;
+            }
+        }
+
         int column = calGroupCount(s, numRows);
         return result;
     }
@@ -40,6 +55,16 @@ public:
         int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
         int index_in_group = index % group_num;
         return index_in_group < numRows ? index_in_group : group_num - index_in_group;
+    }
+    int calColumn(int numRows, int index) {
+        int group = calGroup(numRows, index);
+        if (numRows == 2) {
+            return group;
+        } else {
+            int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
+            int column_in_group = (index % group_num) / numRows;
+            return group * 2 + column_in_group;
+        }
     }
 
     const int top_and_bottom = 2;
