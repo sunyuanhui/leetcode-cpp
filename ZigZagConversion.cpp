@@ -18,13 +18,13 @@ public:
         const int top_and_bottom = 2;
         const int group_num = top_and_bottom + (numRows - top_and_bottom) * 2;
 
-        for (size_t i = 0; i < len; i += group_num) {
-            result.push_back(s.at(i));
-        }
-
-        for (int i = 1; i < numRows - 1; i++) {
+        for (int i = 0; i < numRows; ++i) {
             for (size_t j = i; j < len; j += group_num) {
                 result.push_back(s.at(j));
+
+                if (i == 0 || i == numRows - 1) {
+                    continue;
+                }
 
                 int group = j / group_num;
                 int next = (group_num - i) + group * group_num;
@@ -34,9 +34,6 @@ public:
             }
         }
 
-        for (size_t i = numRows - 1; i < len; i += group_num) {
-            result.push_back(s.at(i));
-        }
         return result;
     }
 };
