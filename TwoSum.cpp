@@ -1,20 +1,27 @@
 #include "TextFixture.h"
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
 class Solution {
 public:
+    
     vector<int> twoSum(vector<int>& nums, int target) {
-        size_t size = nums.size();
+        vector<int> copys = nums;
+        sort(copys.begin(), copys.end());
+        size_t size = copys.size();
         for (size_t i = 0; i < size - 1; ++i) {
-            for (size_t j = i + 1; j < size; ++j) {
-                if ((nums.at(i) + nums.at(j)) == target) {
-                    vector<int> result;
-                    result.push_back(i);
-                    result.push_back(j);
-                    return result;
-                }
+            int first_value = copys.at(i);
+            auto pos = lower_bound(copys.begin() + i + 1, copys.end(), target - first_value);
+            if (*pos + first_value == target) {
+                auto first = find(nums.begin(), nums.end(), first_value);
+                int first_index = distance(nums.begin(), first);
+                auto second = find(nums.begin() + (*pos == first_value ? first_index + 1 : 0), nums.end(), *pos);
+                vector<int> result;
+                result.push_back(first_index);
+                result.push_back(distance(nums.begin(), second));
+                return result;
             }
         }
         return vector<int>();
@@ -29,8 +36,8 @@ TEST_F(LeetCodeTestFixture, TwoSum) {
 
 	result = solution.twoSum(nums1, 9);
 	EXPECT_EQ(result.size(), 2);
-    EXPECT_EQ(result.at(0), 0);
-    EXPECT_EQ(result.at(1), 1);
+    EXPECT_TRUE(find(result.begin(), result.end(), 0) != result.end());
+    EXPECT_TRUE(find(result.begin(), result.end(), 1) != result.end());
 
     int array2[] = {
         0,     2,     4,     6,     8,     10,    12,    14,    16,    18,
@@ -1297,6 +1304,14 @@ TEST_F(LeetCodeTestFixture, TwoSum) {
     
 	result = solution.twoSum(nums2, 16021);
 	EXPECT_EQ(result.size(), 2);
-    EXPECT_EQ(result.at(0), 8010);
-    EXPECT_EQ(result.at(1), 8011);
+    EXPECT_TRUE(find(result.begin(), result.end(), 8010) != result.end());
+    EXPECT_TRUE(find(result.begin(), result.end(), 8011) != result.end());
+
+    int array3[] = { 0, 4, 3, 0 };
+	vector<int> nums3(array3, array3 + sizeof(array3)/sizeof(array3[0]));
+
+	result = solution.twoSum(nums3, 0);
+	EXPECT_EQ(result.size(), 2);
+    EXPECT_TRUE(find(result.begin(), result.end(), 0) != result.end());
+    EXPECT_TRUE(find(result.begin(), result.end(), 3) != result.end());
 }
