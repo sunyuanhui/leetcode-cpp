@@ -26,6 +26,7 @@ add_executable(leetcode
     ReverseInteger.cpp
 	ZigZagConversion.cpp
     TwoSum.cpp
+	StringtoInteger.cpp
 )
 target_link_libraries(leetcode gmock)
 
