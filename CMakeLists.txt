@@ -28,6 +28,7 @@ add_executable(leetcode
     TwoSum.cpp
 	StringtoInteger.cpp
 	PalindromeNumber.cpp
+	RomantoInteger.cpp
 )
 target_link_libraries(leetcode gmock)
 
