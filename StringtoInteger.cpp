@@ -19,23 +19,22 @@ public:
             sign = -1;
         }
 
-        int integer = 0;
+        long long integer = 0;
         for (size_t i = start; i < str.size(); i++) {
             char num_char = str.at(i);
             if ('0' <= num_char && num_char <= '9') {
-                int number = num_char - '0';
-                integer = integer * 10 + number;
-                if (sign > 0 && integer <= 0) {
-                    return INT_MAX;
-                } else if (sign < 0 && integer >= 0) {
+                integer = integer * 10 + (num_char - '0') * sign;
+                if (integer <= INT_MIN) {
                     return INT_MIN;
+                } else if (integer >= INT_MAX) {
+                    return INT_MAX;
                 }
             } else {
                 break;
             }
         }
 
-        return integer * sign;
+        return integer;
     }
 };
 
