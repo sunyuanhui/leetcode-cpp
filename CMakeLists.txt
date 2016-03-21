@@ -27,6 +27,7 @@ add_executable(leetcode
 	ZigZagConversion.cpp
     TwoSum.cpp
 	StringtoInteger.cpp
+	PalindromeNumber.cpp
 )
 target_link_libraries(leetcode gmock)
 
